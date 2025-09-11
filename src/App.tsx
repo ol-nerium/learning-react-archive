@@ -1,9 +1,10 @@
+import { Component } from 'react';
 import './App.css';
 
 import Clicker from '@/components/Clicker/Clicker';
 import Popper from '@/components/Popper/Popper';
 import TogglePopper from '@/components/TogglePopper/TogglePopper';
-import { Component } from 'react';
+import ToDoList from '@/components/ToDoList/ToDoList';
 
 class App extends Component {
   state: { isPopperOpen: boolean } = {
@@ -22,6 +23,7 @@ class App extends Component {
         <Clicker />
         <TogglePopper onStateChange={this.togglePopperVisibility} />
         {this.state.isPopperOpen && <Popper />}
+        <ToDoList />
       </>
     );
   }
