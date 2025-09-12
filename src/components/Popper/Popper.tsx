@@ -5,7 +5,7 @@ import image from './image.jpg';
 export default class Popper extends Component {
   render() {
     return (
-      <div>
+      <div className="popperWrap">
         <img src={image} alt="pic" />
       </div>
     );

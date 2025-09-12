@@ -22,8 +22,7 @@ class App extends Component {
       <>
         <Clicker />
         <TogglePopper onStateChange={this.togglePopperVisibility} />
-        {this.state.isPopperOpen && <Popper />}
-        <ToDoList />
+        {this.state.isPopperOpen ? <Popper /> : <ToDoList />}
       </>
     );
   }

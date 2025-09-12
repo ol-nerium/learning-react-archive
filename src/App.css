@@ -40,3 +40,39 @@
 .read-the-docs {
   color: #888;
 }
+
+label {
+  display: flex;
+  align-items: center;
+  margin-left: 290px;
+  max-width: 280px;
+  font-size: 2rem;
+  margin-top: 10px;
+  justify-content: space-between;
+}
+
+input {
+  margin: 0 1rem 0 0;
+  padding: 10px;
+}
+
+input[type='text'] {
+  margin: 20px 0;
+}
+
+button {
+  margin-left: 1rem;
+  font-size: 1.1rem;
+}
+
+.popperWrap {
+  max-width: 55%;
+  max-height: 55%;
+  margin: 20px auto;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
