@@ -32,6 +32,7 @@ export default class App extends Component<{}, stateType> {
   componentDidMount(): void {
     const stateKeys = Object.keys(this.state) as (keyof stateType)[];
     let resObj: Partial<stateType> = {};
+    console.log(resObj);
     stateKeys.forEach(key => {
       const saved = localStorage.getItem(key);
       if (saved !== null) {
@@ -69,9 +70,21 @@ export default class App extends Component<{}, stateType> {
             totalPages: Math.ceil(newData.totalHits / limits),
             status: Status.LOADED,
           });
-        } else this.setState({ loading: false, status: Status.ERROR });
+        } else
+          this.setState({
+            loading: false,
+            status: Status.ERROR,
+            picturesData: [],
+          });
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log('error =>', error);
+        this.setState({
+          loading: false,
+          status: Status.ERROR,
+          picturesData: [],
+        });
+      })
       .finally(() => this.setState({ loading: false }));
   };
 
