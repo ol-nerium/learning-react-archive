@@ -1,5 +1,9 @@
 export interface stateType {
-  name: string;
-  number: string;
-  key: string;
+  value: string;
+  picturesData: any[];
+  page: number;
+  totalPages: number;
+  loading: boolean;
+  modalData: { visible: boolean; dataOriginal: string; alt: string };
+  status: string;
 }

@@ -4,9 +4,21 @@ import css from './ImageGallery.module.css';
 import ImageGalleryItem from '@/components/ImageGalleryItem/ImageGalleryItem';
 // import Button from '@/components/Button/Button';
 
-export default class ImageGallery extends Component {
+interface picturesItem {
+  tags: string;
+  previewURL: string;
+  largeImageURL: string;
+}
+
+export default class ImageGallery extends Component<
+  {
+    pictures: picturesItem[];
+    onClick: (dataOriginal: string, alt: string) => void;
+  },
+  {}
+> {
   render() {
-    const data = this.props.pictures;
+    const data: picturesItem[] = this.props.pictures;
     return (
       <>
         <ul className={css.ImageGallery}>

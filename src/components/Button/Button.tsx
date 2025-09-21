@@ -6,7 +6,6 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const Button: FC<Props> = ({ children, ...allyProps }) => {
-  // console.log(allyProps);
   return (
     <button className={css.Button} {...allyProps}>
       {children}

@@ -3,7 +3,9 @@ import { FaMagnifyingGlass } from 'react-icons/fa6';
 import css from './Searchbar.module.css';
 import Button from '@/components/Button/Button';
 
-export default class Searchbar extends Component {
+export default class Searchbar extends Component<{
+  onSubmit: (value: string) => void;
+}> {
   state = {
     inputValue: '',
   };

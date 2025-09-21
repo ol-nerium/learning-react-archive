@@ -1,6 +1,16 @@
 import css from './ImageGalleryItem.module.css';
 
-export default function ImageGalleryItem({ src, dataOriginal, alt, onClick }) {
+export default function ImageGalleryItem({
+  src,
+  dataOriginal,
+  alt,
+  onClick,
+}: {
+  src: string;
+  dataOriginal: string;
+  alt: string;
+  onClick: (dataOriginal: string, alt: string) => void;
+}) {
   return (
     <li className={css.ImageGalleryItem}>
       <img

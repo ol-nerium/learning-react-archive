@@ -1,16 +1,23 @@
 import { createPortal } from 'react-dom';
 import css from './Modal.module.css';
-import { Component, type ReactNode } from 'react';
+import React, { Component, type ReactNode } from 'react';
 
-const modalNode = document.getElementById('modal');
-export default class Modal extends Component {
-  closeModal = e => {
+const modalNode = document.getElementById('modal') as HTMLElement;
+export default class Modal extends Component<
+  {
+    data: { dataOriginal: string; alt: string };
+    checkIfImgLoaded: () => void;
+    onModalClose: () => void;
+  },
+  {}
+> {
+  closeModal = (e: KeyboardEvent) => {
     if (e.code === 'Escape') {
       this.props.onModalClose();
     }
   };
 
-  handleOverlayClick = e => {
+  handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) this.props.onModalClose();
   };
 

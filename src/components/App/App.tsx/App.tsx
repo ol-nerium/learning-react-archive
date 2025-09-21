@@ -1,4 +1,4 @@
-import { Component, type ErrorInfo } from 'react';
+import { Component } from 'react';
 import { PuffLoader } from 'react-spinners';
 
 import css from './App.module.css';
@@ -11,68 +11,65 @@ import ImageGallery from '@/components/ImageGallery/ImageGallery';
 import Modal from '@/components/Modal/Modal';
 import SorryMessage from '@/components/SorryMessage/SorryMessage';
 
-// const Status = {
-//   IDLE: 'idle',
-//   LOADING: 'loading',
-//   LOADED: 'loaded',
-//   REJECTED: 'rejected',
-// };
+const Status = {
+  IDLE: 'idle', // Searchbar, no loading, no error, optional gallery
+  LOADED: 'loaded', //  searchbar, no loading, no error, gallery, optional modal
+  ERROR: 'error', // searchbar, no loading, error, no gallery
+};
 
-export default class App extends Component<
-  { contacts: stateType[]; filter: string },
-  {}
-> {
+export default class App extends Component<{}, stateType> {
   state = {
     value: '',
     picturesData: [],
     page: 1,
     totalPages: 1,
+
     loading: false,
-
-    modalIsVisible: false,
-    modalData: { dataOriginal: '', alt: '' },
-
-    // status: Status.IDLE,
+    modalData: { visible: false, dataOriginal: '', alt: '' },
+    status: Status.IDLE,
   };
 
   componentDidMount(): void {
-    const stateKeys = Object.keys(this.state);
-    let resObj = {};
+    const stateKeys = Object.keys(this.state) as (keyof stateType)[];
+    let resObj: Partial<stateType> = {};
     stateKeys.forEach(key => {
-      const res = JSON.parse(localStorage.getItem(key));
-      resObj = { ...resObj, [key]: res };
+      const saved = localStorage.getItem(key);
+      if (saved !== null) {
+        try {
+          resObj[key] = JSON.parse(saved);
+        } catch {
+          // ignore invalid JSON
+        }
+      }
+      // const res = JSON.parse(localStorage.getItem(key) as string);
+      // resObj = { ...resObj, [key]: res };
     });
-    this.setState({ ...this.state, ...resObj });
+    this.setState({ ...this.state, ...resObj, loading: false });
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<{}>,
-    prevState: Readonly<{}>,
-    snapshot?: any
-  ): void {
+  componentDidUpdate(prevProps: {}, prevState: stateType): void {
     if (
       prevState.value !== this.state.value ||
       prevState.page !== this.state.page ||
       prevState.picturesData !== this.state.picturesData
     ) {
-      const stateKeys = Object.keys(this.state);
+      const stateKeys = Object.keys(this.state) as (keyof stateType)[];
       stateKeys.forEach(key =>
         localStorage.setItem(key, JSON.stringify(this.state[key]))
       );
     }
   }
 
-  getPictures = (value: string, page: number, limits = 12) => {
+  getPictures = (value: string, page?: number, limits = 12) => {
     return fetchData(value, page, limits)
       .then(newData => {
-        this.setState({ loading: true });
         if (newData.hits.length !== 0) {
           this.setState({
             picturesData: [...this.state.picturesData, ...newData.hits],
             totalPages: Math.ceil(newData.totalHits / limits),
-            loading: true,
+            status: Status.LOADED,
           });
-        } else this.setState({ loading: false });
+        } else this.setState({ loading: false, status: Status.ERROR });
       })
       .catch(error => console.log(error))
       .finally(() => this.setState({ loading: false }));
@@ -83,7 +80,6 @@ export default class App extends Component<
       value: value,
       picturesData: [],
       page: 1,
-      totalPages: 1,
       loading: true,
     });
     this.getPictures(value);
@@ -96,19 +92,17 @@ export default class App extends Component<
     });
   };
 
-  openModal = (dataOriginal, alt) => {
+  openModal = (dataOriginal: string, alt: string) => {
     this.setState({
       loading: true,
-      modalData: { ...this.state.modalData, dataOriginal, alt },
-      modalIsVisible: true,
+      modalData: { ...this.state.modalData, visible: true, dataOriginal, alt },
     });
   };
 
   closeModal = () => {
     this.setState({
       loading: false,
-      modalData: { dataOriginal: '', alt: '' },
-      modalIsVisible: false,
+      modalData: { visible: false, dataOriginal: '', alt: '' },
     });
   };
 
@@ -117,27 +111,27 @@ export default class App extends Component<
   };
 
   render() {
-    // console.log(this.state.picturesData);
+    const isLoadBtnVisible = this.state.page < this.state.totalPages;
+    const { status, loading, modalData } = this.state;
     return (
       <div className={css.App}>
         <Searchbar onSubmit={this.onSubmit} />
 
-        {this.state.picturesData.length !== 0 ? (
+        {status === Status.ERROR && <SorryMessage />}
+        {status === Status.LOADED && (
           <>
             <ImageGallery
               pictures={this.state.picturesData}
               onClick={this.openModal}
             />
-            {this.state.page < this.state.totalPages && (
+            {isLoadBtnVisible && (
               <Button onClick={this.onLoadNewPics} className={css.LoadBtn}>
                 Load more
               </Button>
             )}
           </>
-        ) : (
-          <SorryMessage />
         )}
-        {this.state.loading && (
+        {loading && (
           <PuffLoader
             cssOverride={{
               position: 'fixed',
@@ -148,9 +142,9 @@ export default class App extends Component<
             size={200}
           />
         )}
-        {this.state.modalIsVisible && (
+        {modalData.visible && (
           <Modal
-            data={this.state.modalData}
+            data={modalData}
             onModalClose={this.closeModal}
             checkIfImgLoaded={this.spinnerViewToggle}
           />
