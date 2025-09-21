@@ -32,7 +32,7 @@ export default class App extends Component<{}, stateType> {
   componentDidMount(): void {
     const stateKeys = Object.keys(this.state) as (keyof stateType)[];
     let resObj: Partial<stateType> = {};
-    console.log(resObj);
+    // console.log(resObj);
     stateKeys.forEach(key => {
       const saved = localStorage.getItem(key);
       if (saved !== null) {
@@ -72,7 +72,6 @@ export default class App extends Component<{}, stateType> {
           });
         } else
           this.setState({
-            loading: false,
             status: Status.ERROR,
             picturesData: [],
           });
@@ -80,7 +79,6 @@ export default class App extends Component<{}, stateType> {
       .catch(error => {
         console.log('error =>', error);
         this.setState({
-          loading: false,
           status: Status.ERROR,
           picturesData: [],
         });
