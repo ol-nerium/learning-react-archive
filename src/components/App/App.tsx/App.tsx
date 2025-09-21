@@ -48,7 +48,7 @@ export default class App extends Component<{}, stateType> {
     this.setState({ ...this.state, ...resObj, loading: false });
   }
 
-  componentDidUpdate(prevProps: {}, prevState: stateType): void {
+  componentDidUpdate(_: {}, prevState: stateType): void {
     if (
       prevState.value !== this.state.value ||
       prevState.page !== this.state.page ||

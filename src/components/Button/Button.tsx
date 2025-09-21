@@ -17,11 +17,13 @@ class Button extends Component<
       type?: string;
       onClick?: () => void;
     }>,
-    prevState: Readonly<{}>,
-    snapshot?: any
+    _: {}
   ): boolean {
-    // console.log('updated', prevProps, this.props);
-    if (this.props.type === prevProps.type) {
+    if (
+      this.props.type === prevProps.type ||
+      this.props.onClick === prevProps.onClick
+    ) {
+      console.log('will not be updated', prevProps, this.props);
       return false;
     } else return true;
   }
@@ -29,7 +31,11 @@ class Button extends Component<
   render() {
     const { children, className, type, onClick, ...allyProps } = this.props;
     return (
-      <button className={` ${className ?? ''} ${css.Button}`} {...allyProps}>
+      <button
+        className={` ${className ?? ''} ${css.Button}`}
+        {...allyProps}
+        onClick={onClick}
+      >
         {children}
       </button>
     );
