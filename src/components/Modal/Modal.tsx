@@ -11,6 +11,14 @@ export default class Modal extends Component<
   },
   {}
 > {
+  componentDidMount(): void {
+    window.addEventListener('keydown', this.closeModal);
+  }
+
+  componentWillUnmount(): void {
+    window.removeEventListener('keydown', this.closeModal);
+  }
+
   closeModal = (e: KeyboardEvent) => {
     if (e.code === 'Escape') {
       this.props.onModalClose();
@@ -20,13 +28,6 @@ export default class Modal extends Component<
   handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) this.props.onModalClose();
   };
-
-  componentDidMount(): void {
-    window.addEventListener('keydown', this.closeModal);
-  }
-  componentWillUnmount(): void {
-    window.removeEventListener('keydown', this.closeModal);
-  }
 
   render(): ReactNode {
     const { dataOriginal, alt } = this.props.data;

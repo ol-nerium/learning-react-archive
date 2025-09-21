@@ -1,15 +1,39 @@
-import type { ButtonHTMLAttributes, FC } from 'react';
+import { Component, type ReactNode } from 'react';
 import css from './Button.module.css';
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  children: React.ReactNode;
-};
+class Button extends Component<
+  {
+    children: ReactNode;
+    className?: string;
+    onClick?: () => void;
+    type?: string;
+  },
+  {}
+> {
+  componentDidUpdate(
+    prevProps: Readonly<{
+      children: ReactNode;
+      className?: string;
+      type?: string;
+      onClick?: () => void;
+    }>,
+    prevState: Readonly<{}>,
+    snapshot?: any
+  ): boolean {
+    // console.log('updated', prevProps, this.props);
+    if (this.props.type === prevProps.type) {
+      return false;
+    } else return true;
+  }
 
-const Button: FC<Props> = ({ children, ...allyProps }) => {
-  return (
-    <button className={css.Button} {...allyProps}>
-      {children}
-    </button>
-  );
-};
+  render() {
+    const { children, className, type, onClick, ...allyProps } = this.props;
+    return (
+      <button className={` ${className ?? ''} ${css.Button}`} {...allyProps}>
+        {children}
+      </button>
+    );
+  }
+}
+
 export default Button;
