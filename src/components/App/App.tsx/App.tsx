@@ -70,10 +70,15 @@ export default class App extends Component<{}, stateType> {
 
   onLoadNewPics = () => {
     this.showLoader();
-    this.setState({ page: this.state.page + 1 }, () => {
-      const { value, page } = this.state;
-      this.getPictures(value, page);
-    });
+    this.setState(
+      prevState => ({
+        page: prevState.page + 1,
+      }),
+      () => {
+        const { value, page } = this.state;
+        this.getPictures(value, page);
+      }
+    );
   };
 
   getPictures = (value: string, page = 1, limits = 12) => {
