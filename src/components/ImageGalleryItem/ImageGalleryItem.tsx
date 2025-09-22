@@ -9,7 +9,7 @@ export default function ImageGalleryItem({
   src: string;
   dataOriginal: string;
   alt: string;
-  onClick: (dataOriginal: string, alt: string) => void;
+  onClick: (e: React.MouseEvent<HTMLImageElement>) => void;
 }) {
   return (
     <li className={css.ImageGalleryItem}>
@@ -18,7 +18,7 @@ export default function ImageGalleryItem({
         alt={alt}
         className={css['ImageGalleryItem-image']}
         data-original={dataOriginal}
-        onClick={() => onClick(dataOriginal, alt)}
+        onClick={onClick}
       />
     </li>
   );

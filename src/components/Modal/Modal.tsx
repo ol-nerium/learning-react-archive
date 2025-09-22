@@ -6,7 +6,6 @@ const modalNode = document.getElementById('modal') as HTMLElement;
 export default class Modal extends Component<
   {
     data: { dataOriginal: string; alt: string };
-    checkIfImgLoaded: () => void;
     onModalClose: () => void;
   },
   {}
@@ -36,11 +35,7 @@ export default class Modal extends Component<
         {createPortal(
           <div className={css.Overlay} onClick={this.handleOverlayClick}>
             <div className={css.Modal}>
-              <img
-                src={dataOriginal}
-                alt={alt}
-                onLoad={this.props.checkIfImgLoaded}
-              />
+              <img src={dataOriginal} alt={alt} />
             </div>
           </div>,
           modalNode

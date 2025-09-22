@@ -20,12 +20,13 @@ class Button extends Component<
     _: {}
   ): boolean {
     if (
-      this.props.type === prevProps.type ||
+      this.props.className === prevProps.className &&
+      this.props.type === prevProps.type &&
       this.props.onClick === prevProps.onClick
     ) {
-      console.log('will not be updated', prevProps, this.props);
       return false;
-    } else return true;
+    }
+    return true;
   }
 
   render() {

@@ -2,7 +2,7 @@ import { Component } from 'react';
 import css from './ImageGallery.module.css';
 
 import ImageGalleryItem from '@/components/ImageGalleryItem/ImageGalleryItem';
-// import Button from '@/components/Button/Button';
+import Modal from '@/components/Modal/Modal';
 
 interface picturesItem {
   tags: string;
@@ -11,14 +11,35 @@ interface picturesItem {
 }
 
 export default class ImageGallery extends Component<
+  { pictures: picturesItem[]; showLoader: () => void; hideLoader: () => void },
   {
-    pictures: picturesItem[];
-    onClick: (dataOriginal: string, alt: string) => void;
-  },
-  {}
+    modalData: { visible: boolean; dataOriginal: string; alt: string };
+  }
 > {
+  state = {
+    modalData: { visible: false, dataOriginal: '', alt: '' },
+  };
+
+  openModal = (e: React.MouseEvent<HTMLImageElement>): void => {
+    const alt: string = e.currentTarget.alt;
+    const dataOriginal = e.currentTarget.dataset.original as string;
+    this.props.showLoader();
+    this.setState({
+      modalData: { ...this.state.modalData, visible: true, dataOriginal, alt },
+    });
+  };
+
+  closeModal = (): void => {
+    this.props.hideLoader();
+    this.setState({
+      modalData: { visible: false, dataOriginal: '', alt: '' },
+    });
+  };
+
   render() {
     const data: picturesItem[] = this.props.pictures;
+    const { modalData } = this.state;
+    const { visible } = modalData;
     return (
       <>
         <ul className={css.ImageGallery}>
@@ -29,11 +50,12 @@ export default class ImageGallery extends Component<
                 src={previewURL}
                 dataOriginal={largeImageURL}
                 alt={tags}
-                onClick={this.props.onClick}
+                onClick={this.openModal}
               />
             );
           })}
         </ul>
+        {visible && <Modal data={modalData} onModalClose={this.closeModal} />}
       </>
     );
   }

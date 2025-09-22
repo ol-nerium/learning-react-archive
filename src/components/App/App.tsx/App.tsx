@@ -8,7 +8,6 @@ import { fetchData } from '@/utils/pixabay-api';
 import Button from '../../Button/Button';
 import Searchbar from '../../Searchbar/Searchbar';
 import ImageGallery from '@/components/ImageGallery/ImageGallery';
-import Modal from '@/components/Modal/Modal';
 import SorryMessage from '@/components/SorryMessage/SorryMessage';
 
 const Status = {
@@ -32,7 +31,6 @@ export default class App extends Component<{}, stateType> {
   componentDidMount(): void {
     const stateKeys = Object.keys(this.state) as (keyof stateType)[];
     let resObj: Partial<stateType> = {};
-    // console.log(resObj);
     stateKeys.forEach(key => {
       const saved = localStorage.getItem(key);
       if (saved !== null) {
@@ -42,10 +40,9 @@ export default class App extends Component<{}, stateType> {
           // ignore invalid JSON
         }
       }
-      // const res = JSON.parse(localStorage.getItem(key) as string);
-      // resObj = { ...resObj, [key]: res };
     });
-    this.setState({ ...this.state, ...resObj, loading: false });
+    this.setState({ ...this.state, ...resObj });
+    this.hideLoader();
   }
 
   componentDidUpdate(_: {}, prevState: stateType): void {
@@ -61,7 +58,25 @@ export default class App extends Component<{}, stateType> {
     }
   }
 
-  getPictures = (value: string, page?: number, limits = 12) => {
+  onSubmit = (value: string): void => {
+    this.setState({
+      value: value,
+      picturesData: [],
+      page: 1,
+    });
+    this.showLoader();
+    this.getPictures(value);
+  };
+
+  onLoadNewPics = () => {
+    this.showLoader();
+    this.setState({ page: this.state.page + 1 }, () => {
+      const { value, page } = this.state;
+      this.getPictures(value, page);
+    });
+  };
+
+  getPictures = (value: string, page = 1, limits = 12) => {
     return fetchData(value, page, limits)
       .then(newData => {
         if (newData.hits.length !== 0) {
@@ -83,47 +98,19 @@ export default class App extends Component<{}, stateType> {
           picturesData: [],
         });
       })
-      .finally(() => this.setState({ loading: false }));
+      .finally(() => this.hideLoader());
   };
 
-  onSubmit = (value: string): void => {
-    this.setState({
-      value: value,
-      picturesData: [],
-      page: 1,
-      loading: true,
-    });
-    this.getPictures(value);
+  showLoader = () => {
+    this.setState({ loading: true });
   };
-
-  onLoadNewPics = () => {
-    this.setState({ page: this.state.page + 1, loading: true }, () => {
-      const { value, page } = this.state;
-      this.getPictures(value, page);
-    });
-  };
-
-  openModal = (dataOriginal: string, alt: string) => {
-    this.setState({
-      loading: true,
-      modalData: { ...this.state.modalData, visible: true, dataOriginal, alt },
-    });
-  };
-
-  closeModal = () => {
-    this.setState({
-      loading: false,
-      modalData: { visible: false, dataOriginal: '', alt: '' },
-    });
-  };
-
-  spinnerViewToggle = () => {
-    this.setState({ loading: !this.state.loading });
+  hideLoader = () => {
+    this.setState({ loading: false });
   };
 
   render() {
     const isLoadBtnVisible = this.state.page < this.state.totalPages;
-    const { status, loading, modalData } = this.state;
+    const { status, loading } = this.state;
     return (
       <div className={css.App}>
         <Searchbar onSubmit={this.onSubmit} />
@@ -133,7 +120,8 @@ export default class App extends Component<{}, stateType> {
           <>
             <ImageGallery
               pictures={this.state.picturesData}
-              onClick={this.openModal}
+              showLoader={this.showLoader}
+              hideLoader={this.hideLoader}
             />
             {isLoadBtnVisible && (
               <Button onClick={this.onLoadNewPics} className={css.LoadBtn}>
@@ -151,13 +139,6 @@ export default class App extends Component<{}, stateType> {
               translate: '-50% -50%',
             }}
             size={200}
-          />
-        )}
-        {modalData.visible && (
-          <Modal
-            data={modalData}
-            onModalClose={this.closeModal}
-            checkIfImgLoaded={this.spinnerViewToggle}
           />
         )}
       </div>
