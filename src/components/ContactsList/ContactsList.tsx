@@ -1,6 +1,6 @@
 import css from './ContactsList.module.css';
 import ContactItem from '@/components/ContactItem/ContactItem';
-import { stateType } from '@/utils/types';
+import type { stateType } from '@/utils/types';
 
 const ContactsList = ({
   contacts,
@@ -9,6 +9,7 @@ const ContactsList = ({
   contacts: stateType[];
   onDelete: (key: string) => void;
 }) => {
+  // console.log(contacts);
   return (
     <ul className={css.contactsList}>
       {contacts.map(({ name, number, key }) => {

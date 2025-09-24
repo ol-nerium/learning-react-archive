@@ -1,29 +1,35 @@
-import React, { Component, type ReactNode } from 'react';
+// import React, { Component, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import css from './ContactFilter.module.css';
 
-export default class ContactFilter extends Component<
-  { onChange: (value: string) => void },
-  {}
-> {
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    this.props.onChange(value);
+export default function ContactFilter({
+  onChange,
+}: {
+  onChange: (value: string) => void;
+}) {
+  const [value, setValue] = useState('');
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.currentTarget.value;
+    setValue(inputValue);
   };
 
-  render(): ReactNode {
-    return (
-      <form className={css.form}>
-        <label htmlFor="filter" className={css.label}>
-          Find contact by name
-        </label>
-        <input
-          type="text"
-          name="filter"
-          id="filter"
-          className={css.input}
-          onChange={this.handleChange}
-        />
-      </form>
-    );
-  }
+  useEffect(() => {
+    onChange(value);
+  }, [value]);
+
+  return (
+    <form className={css.form}>
+      <label htmlFor="filter" className={css.label}>
+        Find contact by name
+      </label>
+      <input
+        type="text"
+        name="filter"
+        id="filter"
+        className={css.input}
+        onChange={handleChange}
+        value={value}
+      />
+    </form>
+  );
 }
