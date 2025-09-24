@@ -1,4 +1,4 @@
-import { Component, useEffect, type ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import css from './Button.module.css';
 
 interface propsType {
@@ -17,7 +17,7 @@ export default function Button({
 }: propsType) {
   useEffect(() => {
     console.log('btn is rerendering but who cares');
-  }, [className, type, onClick]);
+  }, [className, type]);
 
   return (
     <button
@@ -29,28 +29,3 @@ export default function Button({
     </button>
   );
 }
-
-class OldButton {
-  componentDidUpdate(
-    prevProps: Readonly<{
-      children: ReactNode;
-      className?: string;
-      type?: string;
-      onClick?: () => void;
-    }>,
-    _: {}
-  ): boolean {
-    if (
-      this.props.className === prevProps.className &&
-      this.props.type === prevProps.type &&
-      this.props.onClick === prevProps.onClick
-    ) {
-      return false;
-    }
-    return true;
-  }
-
-  render() {}
-}
-
-// export default Button;

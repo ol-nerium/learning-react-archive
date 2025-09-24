@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import css from './ImageGallery.module.css';
 
 import ImageGalleryItem from '@/components/ImageGalleryItem/ImageGalleryItem';
@@ -10,53 +10,58 @@ interface picturesItem {
   largeImageURL: string;
 }
 
-export default class ImageGallery extends Component<
-  { pictures: picturesItem[]; showLoader: () => void; hideLoader: () => void },
-  {
-    modalData: { visible: boolean; dataOriginal: string; alt: string };
-  }
-> {
-  state = {
-    modalData: { visible: false, dataOriginal: '', alt: '' },
-  };
+const ImageGallery = ({
+  showLoader,
+  hideLoader,
+  pictures,
+}: {
+  pictures: picturesItem[];
+  showLoader: () => void;
+  hideLoader: () => void;
+}) => {
+  //
 
-  openModal = (e: React.MouseEvent<HTMLImageElement>): void => {
+  const [visible, setVisible] = useState<boolean>(false);
+  const [dataOriginal, setDataOriginal] = useState<string>('');
+  const [alt, setAlt] = useState<string>('');
+
+  const openModal = (e: React.MouseEvent<HTMLImageElement>): void => {
     const alt: string = e.currentTarget.alt;
     const dataOriginal = e.currentTarget.dataset.original as string;
-    this.props.showLoader();
-    this.setState({
-      modalData: { ...this.state.modalData, visible: true, dataOriginal, alt },
-    });
+    showLoader();
+    setVisible(true);
+    setDataOriginal(dataOriginal);
+    setAlt(alt);
+    hideLoader();
   };
 
-  closeModal = (): void => {
-    this.props.hideLoader();
-    this.setState({
-      modalData: { visible: false, dataOriginal: '', alt: '' },
-    });
+  const closeModal = (): void => {
+    hideLoader();
+    setVisible(false);
+    setDataOriginal('');
+    setAlt('');
   };
 
-  render() {
-    const data: picturesItem[] = this.props.pictures;
-    const { modalData } = this.state;
-    const { visible } = modalData;
-    return (
-      <>
-        <ul className={css.ImageGallery}>
-          {data.map(({ tags, previewURL, largeImageURL }, index) => {
-            return (
-              <ImageGalleryItem
-                key={index}
-                src={previewURL}
-                dataOriginal={largeImageURL}
-                alt={tags}
-                onClick={this.openModal}
-              />
-            );
-          })}
-        </ul>
-        {visible && <Modal data={modalData} onModalClose={this.closeModal} />}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <ul className={css.ImageGallery}>
+        {pictures.map(({ tags, previewURL, largeImageURL }, index) => {
+          return (
+            <ImageGalleryItem
+              key={index}
+              src={previewURL}
+              dataOriginal={largeImageURL}
+              alt={tags}
+              onClick={openModal}
+            />
+          );
+        })}
+      </ul>
+      {visible && (
+        <Modal data={{ dataOriginal, alt }} onModalClose={closeModal} />
+      )}
+    </>
+  );
+};
+
+export default ImageGallery;

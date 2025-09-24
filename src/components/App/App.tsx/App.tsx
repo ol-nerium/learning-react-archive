@@ -30,12 +30,12 @@ export default function App() {
     return loadFromStorage(1, 'totalPages');
   });
   const [status, setStatus] = useState<string>(() => {
-    // loadFromStorage(Status.IDLE, 'status');
-    // fix bug from here
-    return Status.IDLE;
+    return loadFromStorage(Status.IDLE, 'status') === Status.ERROR
+      ? Status.IDLE
+      : Status.LOADED;
   });
 
-  function loadFromStorage(init: T, name: string): T {
+  function loadFromStorage<T>(init: T, name: string): T {
     const saved = localStorage.getItem(name);
     let keyValue = init;
     if (saved !== null) {
@@ -107,6 +107,10 @@ export default function App() {
       {status === Status.ERROR && <SorryMessage />}
       {status === Status.LOADED && (
         <>
+          <h2 style={{ textAlign: 'center' }}>
+            Currently searching{' '}
+            <span style={{ fontSize: '2rem' }}>{value}</span>
+          </h2>
           <ImageGallery
             pictures={picturesData}
             showLoader={showLoader}

@@ -1,47 +1,44 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import css from './Searchbar.module.css';
 import Button from '@/components/Button/Button';
 
-export default class Searchbar extends Component<{
+export default function Searchbar({
+  onSubmit,
+}: {
   onSubmit: (value: string) => void;
-}> {
-  state = {
-    inputValue: '',
+}) {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.currentTarget.value);
   };
 
-  handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ inputValue: e.currentTarget.value });
-  };
-
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (this.state.inputValue.trim())
-      return this.props.onSubmit(this.state.inputValue);
+    if (inputValue.trim()) return onSubmit(inputValue);
     return alert('fill input');
   };
 
-  render() {
-    return (
-      <header className={css.Searchbar}>
-        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
-          <Button type="submit" className={css['SearchForm-button']}>
-            <span className={css['SearchForm-button-label']}>
-              <FaMagnifyingGlass />
-            </span>
-          </Button>
+  return (
+    <header className={css.Searchbar}>
+      <form className={css.SearchForm} onSubmit={handleSubmit}>
+        <Button type="submit" className={css['SearchForm-button']}>
+          <span className={css['SearchForm-button-label']}>
+            <FaMagnifyingGlass />
+          </span>
+        </Button>
 
-          <input
-            className={css['SearchForm-input']}
-            id="searchInput"
-            type="text"
-            autoComplete="off"
-            autoFocus
-            onChange={this.handleChange}
-            value={this.state.inputValue}
-          />
-        </form>
-      </header>
-    );
-  }
+        <input
+          className={css['SearchForm-input']}
+          id="searchInput"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          onChange={handleChange}
+          value={inputValue}
+        />
+      </form>
+    </header>
+  );
 }

@@ -1,46 +1,45 @@
 import { createPortal } from 'react-dom';
 import css from './Modal.module.css';
-import React, { Component, type ReactNode } from 'react';
+import React, { useEffect } from 'react';
 
 const modalNode = document.getElementById('modal') as HTMLElement;
-export default class Modal extends Component<
-  {
-    data: { dataOriginal: string; alt: string };
-    onModalClose: () => void;
-  },
-  {}
-> {
-  componentDidMount(): void {
-    window.addEventListener('keydown', this.closeModal);
-  }
 
-  componentWillUnmount(): void {
-    window.removeEventListener('keydown', this.closeModal);
-  }
+export default function Modal({
+  data,
+  onModalClose,
+}: {
+  data: { dataOriginal: string; alt: string };
+  onModalClose: () => void;
+}) {
+  useEffect(() => {
+    window.addEventListener('keydown', closeModal);
+    return () => {
+      window.removeEventListener('keydown', closeModal);
+    };
+  }, []);
 
-  closeModal = (e: KeyboardEvent) => {
+  const closeModal = (e: KeyboardEvent) => {
+    console.log('still working');
     if (e.code === 'Escape') {
-      this.props.onModalClose();
+      onModalClose();
     }
   };
 
-  handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) this.props.onModalClose();
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onModalClose();
   };
 
-  render(): ReactNode {
-    const { dataOriginal, alt } = this.props.data;
-    return (
-      <>
-        {createPortal(
-          <div className={css.Overlay} onClick={this.handleOverlayClick}>
-            <div className={css.Modal}>
-              <img src={dataOriginal} alt={alt} />
-            </div>
-          </div>,
-          modalNode
-        )}
-      </>
-    );
-  }
+  const { dataOriginal, alt } = data;
+  return (
+    <>
+      {createPortal(
+        <div className={css.Overlay} onClick={handleOverlayClick}>
+          <div className={css.Modal}>
+            <img src={dataOriginal} alt={alt} />
+          </div>
+        </div>,
+        modalNode
+      )}
+    </>
+  );
 }
