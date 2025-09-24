@@ -1,38 +1,27 @@
 import { Container, Button, Reset } from './VoteOptions.styled';
 
-import type { VoteType } from '@/utils/votes';
+import type { OptionType } from '@/utils/votes';
 
 export default function VoteOptions({
-  handleChange,
+  handleVote,
   reset,
 }: {
-  handleChange: (value: VoteType) => void;
+  handleVote: (value: OptionType) => void;
   reset: () => void;
 }) {
+  const handleChange = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    handleVote(evt.currentTarget.dataset.option as OptionType);
+  };
+
   return (
     <Container>
-      <Button
-        value="good"
-        onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-          handleChange(evt.currentTarget.value as VoteType)
-        }
-      >
+      <Button data-option="good" onClick={handleChange}>
         Good
       </Button>
-      <Button
-        value="neutral"
-        onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-          handleChange(evt.currentTarget.value as VoteType)
-        }
-      >
+      <Button data-option="neutral" onClick={handleChange}>
         Neutral
       </Button>
-      <Button
-        value="bad"
-        onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-          handleChange(evt.currentTarget.value as VoteType)
-        }
-      >
+      <Button data-option="bad" onClick={handleChange}>
         Bad
       </Button>
       <Reset onClick={reset}>Reset</Reset>

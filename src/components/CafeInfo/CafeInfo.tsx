@@ -1,6 +1,7 @@
 import { Container, Title, Description } from './CafeInfo.styled';
 
 export default function CafeInfo() {
+  // console.log('re-render?');
   return (
     <Container>
       <Title>Sip Happens Café</Title>

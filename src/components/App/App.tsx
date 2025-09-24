@@ -5,28 +5,36 @@ import VoteOptions from '../VoteOptions/VoteOptions';
 import Notification from '../Notification/Notification';
 import VoteStats from '../VoteStats/VoteStats';
 
-import type { Votes, VoteType } from '@/utils/votes';
+import type { OptionType } from '@/utils/votes';
 
 export default function App() {
-  const [votes, setVotes] = useState<Votes>({
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  });
+  const [good, setGood] = useState<number>(0);
+  const [bad, setBad] = useState<number>(0);
+  const [neutral, setNeutral] = useState<number>(0);
 
-  function handleVote(type: VoteType): void {
-    setVotes({ ...votes, [type]: votes[type] + 1 });
+  function handleVote(option: OptionType): void {
+    switch (option) {
+      case 'good':
+        setGood(prev => prev + 1);
+        break;
+      case 'bad':
+        setBad(prev => prev + 1);
+        break;
+      case 'neutral':
+        setNeutral(prev => prev + 1);
+        break;
+
+      default:
+        return console.log('no such type');
+    }
   }
 
   function resetVotes(): void {
-    setVotes({
-      good: 0,
-      neutral: 0,
-      bad: 0,
-    });
+    setGood(0);
+    setNeutral(0);
+    setBad(0);
   }
 
-  const { good, neutral, bad } = votes;
   const totalVotes = good + neutral + bad;
   const positivePercentage = totalVotes
     ? Math.round((good / totalVotes) * 100)
@@ -35,7 +43,7 @@ export default function App() {
   return (
     <AppNod>
       <CafeInfo />
-      <VoteOptions handleChange={handleVote} reset={resetVotes} />
+      <VoteOptions handleVote={handleVote} reset={resetVotes} />
       {totalVotes ? (
         <VoteStats
           statsValues={[good, neutral, bad, totalVotes, positivePercentage]}
