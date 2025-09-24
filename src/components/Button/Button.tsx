@@ -1,15 +1,36 @@
-import { Component, type ReactNode } from 'react';
+import { Component, useEffect, type ReactNode } from 'react';
 import css from './Button.module.css';
 
-class Button extends Component<
-  {
-    children: ReactNode;
-    className?: string;
-    onClick?: () => void;
-    type?: string;
-  },
-  {}
-> {
+interface propsType {
+  children: ReactNode;
+  className?: string;
+  onClick?: () => void;
+  type?: string;
+}
+
+export default function Button({
+  children,
+  className,
+  type,
+  onClick,
+  ...allyProps
+}: propsType) {
+  useEffect(() => {
+    console.log('btn is rerendering but who cares');
+  }, [className, type, onClick]);
+
+  return (
+    <button
+      className={` ${className ?? ''} ${css.Button}`}
+      {...allyProps}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+
+class OldButton {
   componentDidUpdate(
     prevProps: Readonly<{
       children: ReactNode;
@@ -29,18 +50,7 @@ class Button extends Component<
     return true;
   }
 
-  render() {
-    const { children, className, type, onClick, ...allyProps } = this.props;
-    return (
-      <button
-        className={` ${className ?? ''} ${css.Button}`}
-        {...allyProps}
-        onClick={onClick}
-      >
-        {children}
-      </button>
-    );
-  }
+  render() {}
 }
 
-export default Button;
+// export default Button;
