@@ -17,6 +17,7 @@ const Status = {
 
 export default function App() {
   const [loading, setloading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const [value, setValue] = useState<string>(() => {
     return loadFromStorage('', 'value');
   });
@@ -75,18 +76,16 @@ export default function App() {
   const getPictures = (value: string, page = 1, limits = 12) => {
     return fetchData(value, page, limits)
       .then(newData => {
-        if (newData.hits.length !== 0) {
-          setPicturesData(prev => [...prev, ...newData.hits]);
-          setTotalPages(Math.ceil(newData.totalHits / limits));
-          setStatus(Status.LOADED);
-        } else {
-          setStatus(Status.ERROR);
-          setPicturesData([]);
+        if (newData.hits.length === 0) {
+          throw new Error('Sorry, no results ;(');
         }
+        setTotalPages(Math.ceil(newData.totalHits / limits));
+        setPicturesData(prev => [...prev, ...newData.hits]);
+        setStatus(Status.LOADED);
       })
       .catch(error => {
-        console.log('error =>', error);
         setPicturesData([]);
+        setErrorMessage(error.message);
         setStatus(Status.ERROR);
       })
       .finally(() => hideLoader());
@@ -104,11 +103,11 @@ export default function App() {
     <div className={css.App}>
       <Searchbar onSubmit={onSubmit} />
 
-      {status === Status.ERROR && <SorryMessage />}
+      {status === Status.ERROR && <SorryMessage errorMessage={errorMessage} />}
       {status === Status.LOADED && (
         <>
           <h2 style={{ textAlign: 'center' }}>
-            Currently searching{' '}
+            Currently searching
             <span style={{ fontSize: '2rem' }}>{value}</span>
           </h2>
           <ImageGallery
