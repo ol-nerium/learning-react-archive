@@ -106,9 +106,18 @@ export default function App() {
       {status === Status.ERROR && <SorryMessage errorMessage={errorMessage} />}
       {status === Status.LOADED && (
         <>
-          <h2 style={{ textAlign: 'center' }}>
+          <h2
+            style={{
+              textAlign: 'center',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             Currently searching
-            <span style={{ fontSize: '2rem' }}>{value}</span>
+            <span style={{ fontSize: '2rem', marginLeft: '0.3rem' }}>
+              {value}
+            </span>
           </h2>
           <ImageGallery
             pictures={picturesData}
