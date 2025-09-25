@@ -1,13 +1,12 @@
+import React from 'react';
 import css from './ImageGalleryItem.module.css';
 
-export default function ImageGalleryItem({
+const ImageGalleryItem = React.memo(function ImageGalleryItem({
   src,
-  dataOriginal,
   alt,
   onClick,
 }: {
   src: string;
-  dataOriginal: string;
   alt: string;
   onClick: (e: React.MouseEvent<HTMLImageElement>) => void;
 }) {
@@ -17,9 +16,10 @@ export default function ImageGalleryItem({
         src={src}
         alt={alt}
         className={css['ImageGalleryItem-image']}
-        data-original={dataOriginal}
         onClick={onClick}
       />
     </li>
   );
-}
+});
+
+export default ImageGalleryItem;

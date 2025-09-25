@@ -1,41 +1,42 @@
 import { createPortal } from 'react-dom';
+import React, { useEffect, useCallback } from 'react';
 import css from './Modal.module.css';
-import React, { useEffect } from 'react';
 
 const modalNode = document.getElementById('modal') as HTMLElement;
 
 export default function Modal({
-  data,
+  image,
   onModalClose,
 }: {
-  data: { dataOriginal: string; alt: string };
+  image: { url: string; alt: string };
   onModalClose: () => void;
 }) {
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) onModalClose();
+    },
+    [onModalClose]
+  );
+
   useEffect(() => {
+    const closeModal = (e: KeyboardEvent) => {
+      if (e.code === 'Escape') {
+        onModalClose();
+      }
+    };
     window.addEventListener('keydown', closeModal);
     return () => {
       window.removeEventListener('keydown', closeModal);
     };
-  }, []);
+  }, [onModalClose]);
 
-  const closeModal = (e: KeyboardEvent) => {
-    console.log('still working');
-    if (e.code === 'Escape') {
-      onModalClose();
-    }
-  };
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onModalClose();
-  };
-
-  const { dataOriginal, alt } = data;
+  const { url, alt } = image;
   return (
     <>
       {createPortal(
         <div className={css.Overlay} onClick={handleOverlayClick}>
-          <div className={css.Modal}>
-            <img src={dataOriginal} alt={alt} />
+          <div role="dialog" aria-modal="true" className={css.Modal}>
+            <img src={url} alt={alt} />
           </div>
         </div>,
         modalNode

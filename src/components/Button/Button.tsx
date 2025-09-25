@@ -16,7 +16,7 @@ export default function Button({
   ...allyProps
 }: propsType) {
   useEffect(() => {
-    console.log('btn is rerendering but who cares');
+    // console.log('btn is rerendering but who cares');
   }, [className, type]);
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import css from './ImageGallery.module.css';
 
 import ImageGalleryItem from '@/components/ImageGalleryItem/ImageGalleryItem';
@@ -10,56 +10,43 @@ interface picturesItem {
   largeImageURL: string;
 }
 
-const ImageGallery = ({
-  showLoader,
-  hideLoader,
-  pictures,
-}: {
-  pictures: picturesItem[];
-  showLoader: () => void;
-  hideLoader: () => void;
-}) => {
-  //
+const ImageGallery = ({ pictures }: { pictures: picturesItem[] }) => {
+  const [selected, setSelected] = useState<{ url: string; alt: string } | null>(
+    null
+  );
 
-  const [visible, setVisible] = useState<boolean>(false);
-  const [dataOriginal, setDataOriginal] = useState<string>('');
-  const [alt, setAlt] = useState<string>('');
+  const openModal = useCallback((url: string, alt: string): void => {
+    setSelected({ url, alt });
+  }, []);
 
-  const openModal = (e: React.MouseEvent<HTMLImageElement>): void => {
-    const alt: string = e.currentTarget.alt;
-    const dataOriginal = e.currentTarget.dataset.original as string;
-    showLoader();
-    setVisible(true);
-    setDataOriginal(dataOriginal);
-    setAlt(alt);
-    hideLoader();
-  };
+  const handleClick = useCallback(
+    (url: string, alt: string) => () => openModal(url, alt),
+    [openModal]
+  );
 
-  const closeModal = (): void => {
-    hideLoader();
-    setVisible(false);
-    setDataOriginal('');
-    setAlt('');
-  };
+  const closeModal = useCallback((): void => {
+    setSelected(null);
+  }, []);
 
   return (
     <>
       <ul className={css.ImageGallery}>
         {pictures.map(({ tags, previewURL, largeImageURL }, index) => {
+          const normalizedAlt = tags
+            .split(',')
+            .map(s => s.trim())
+            .join(' ');
           return (
             <ImageGalleryItem
-              key={index}
+              key={`${largeImageURL}-${index}`}
               src={previewURL}
-              dataOriginal={largeImageURL}
-              alt={tags}
-              onClick={openModal}
+              alt={normalizedAlt}
+              onClick={handleClick(largeImageURL, normalizedAlt)}
             />
           );
         })}
       </ul>
-      {visible && (
-        <Modal data={{ dataOriginal, alt }} onModalClose={closeModal} />
-      )}
+      {selected && <Modal image={selected} onModalClose={closeModal} />}
     </>
   );
 };

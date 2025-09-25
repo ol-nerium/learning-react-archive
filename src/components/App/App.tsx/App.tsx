@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { PuffLoader } from 'react-spinners';
 
 import css from './App.module.css';
@@ -8,33 +8,44 @@ import Button from '../../Button/Button';
 import Searchbar from '../../Searchbar/Searchbar';
 import ImageGallery from '@/components/ImageGallery/ImageGallery';
 import SorryMessage from '@/components/SorryMessage/SorryMessage';
+import Title from '@/components/Title/Title';
 
 const Status = {
   IDLE: 'idle', // Searchbar, no loading, no error, optional gallery
-  LOADED: 'loaded', //  searchbar, no loading, no error, gallery, optional modal
+  SUCCESS: 'success', //  searchbar, no loading, no error, gallery, optional modal
   ERROR: 'error', // searchbar, no loading, error, no gallery
 };
 
 export default function App() {
   const [loading, setloading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [value, setValue] = useState<string>(() => {
-    return loadFromStorage('', 'value');
-  });
-  const [picturesData, setPicturesData] = useState<any[]>(() => {
-    return loadFromStorage([], 'picturesData');
-  });
-  const [page, setPage] = useState<number>(() => {
-    return loadFromStorage(1, 'page');
-  });
-  const [totalPages, setTotalPages] = useState<number>(() => {
-    return loadFromStorage(1, 'totalPages');
-  });
-  const [status, setStatus] = useState<string>(() => {
-    return loadFromStorage(Status.IDLE, 'status') === Status.ERROR
-      ? Status.IDLE
-      : Status.LOADED;
-  });
+  const [status, setStatus] = useState<string>(() =>
+    loadFromStorage(Status.IDLE, 'status')
+  );
+  const [value, setValue] = useState<string>(() =>
+    loadFromStorage('', 'value')
+  );
+  const [picturesData, setPicturesData] = useState<any[]>(() =>
+    loadFromStorage([], 'picturesData')
+  );
+  const [page, setPage] = useState<number>(() => loadFromStorage(1, 'page'));
+  const [totalPages, setTotalPages] = useState<number>(() =>
+    loadFromStorage(1, 'totalPages')
+  );
+
+  const firstUpdate = useRef(true);
+  useEffect(() => {
+    if (firstUpdate.current) firstUpdate.current = false;
+    return () => {
+      firstUpdate.current = true;
+    };
+  }, []);
+  useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      return;
+    }
+    getPictures(value, page);
+  }, [page]);
 
   function loadFromStorage<T>(init: T, name: string): T {
     const saved = localStorage.getItem(name);
@@ -52,23 +63,22 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('value', JSON.stringify(value));
     localStorage.setItem('picturesData', JSON.stringify(picturesData));
-    localStorage.setItem('page', JSON.stringify(page));
     localStorage.setItem('totalPages', JSON.stringify(totalPages));
     localStorage.setItem('status', JSON.stringify(status));
-  }, [picturesData, value, page, totalPages, status]);
+    localStorage.setItem('page', JSON.stringify(page));
+  }, [picturesData, value, totalPages, status]);
 
   const onSubmit = (value: string): void => {
     setValue(value);
     setPicturesData([]);
     setPage(1);
-    showLoader();
+    setloading(true);
     getPictures(value);
   };
 
   const onLoadNewPics = () => {
-    showLoader();
+    setloading(true);
     setPage(prev => {
-      getPictures(value, prev + 1);
       return prev + 1;
     });
   };
@@ -81,49 +91,26 @@ export default function App() {
         }
         setTotalPages(Math.ceil(newData.totalHits / limits));
         setPicturesData(prev => [...prev, ...newData.hits]);
-        setStatus(Status.LOADED);
+        setStatus(Status.SUCCESS);
       })
       .catch(error => {
-        setPicturesData([]);
         setErrorMessage(error.message);
         setStatus(Status.ERROR);
       })
-      .finally(() => hideLoader());
-  };
-
-  const showLoader = () => {
-    setloading(true);
-  };
-  const hideLoader = () => {
-    setloading(false);
+      .finally(() => setloading(false));
   };
 
   const isLoadBtnVisible = page < totalPages;
+  const loaderSize = 200;
   return (
     <div className={css.App}>
       <Searchbar onSubmit={onSubmit} />
 
       {status === Status.ERROR && <SorryMessage errorMessage={errorMessage} />}
-      {status === Status.LOADED && (
+      {status === Status.SUCCESS && (
         <>
-          <h2
-            style={{
-              textAlign: 'center',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            Currently searching
-            <span style={{ fontSize: '2rem', marginLeft: '0.3rem' }}>
-              {value}
-            </span>
-          </h2>
-          <ImageGallery
-            pictures={picturesData}
-            showLoader={showLoader}
-            hideLoader={hideLoader}
-          />
+          <Title value={value}></Title>
+          <ImageGallery pictures={picturesData} />
           {isLoadBtnVisible && (
             <Button onClick={onLoadNewPics} className={css.LoadBtn}>
               Load more
@@ -139,7 +126,7 @@ export default function App() {
             left: '50%',
             translate: '-50% -50%',
           }}
-          size={200}
+          size={loaderSize}
         />
       )}
     </div>
