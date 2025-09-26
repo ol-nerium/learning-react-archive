@@ -1,4 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
 import { PuffLoader } from 'react-spinners';
 
 import css from './App.module.css';
@@ -35,15 +41,21 @@ export default function App() {
 
   const firstUpdate = useRef(true);
   useEffect(() => {
-    if (firstUpdate.current) firstUpdate.current = false;
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      console.log('[] useEffect, mount, changing to ', firstUpdate.current);
+    }
     return () => {
+      console.log('[] useEffect, unmount', firstUpdate.current);
       firstUpdate.current = true;
     };
   }, []);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (firstUpdate.current) {
+      console.log('page useEffect on first render');
       return;
     }
+    console.log('page useEffect on not first render');
     getPictures(value, page);
   }, [page]);
 
