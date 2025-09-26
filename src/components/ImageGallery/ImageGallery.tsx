@@ -10,7 +10,13 @@ interface picturesItem {
   largeImageURL: string;
 }
 
-const ImageGallery = ({ pictures }: { pictures: picturesItem[] }) => {
+const ImageGallery = ({
+  pictures,
+  loader,
+}: {
+  pictures: picturesItem[];
+  loader: (value: boolean) => void;
+}) => {
   const [selected, setSelected] = useState<{ url: string; alt: string } | null>(
     null
   );
@@ -19,14 +25,14 @@ const ImageGallery = ({ pictures }: { pictures: picturesItem[] }) => {
     setSelected({ url, alt });
   }, []);
 
+  const closeModal = useCallback((): void => {
+    setSelected(null);
+  }, []);
+
   const handleClick = useCallback(
     (url: string, alt: string) => () => openModal(url, alt),
     [openModal]
   );
-
-  const closeModal = useCallback((): void => {
-    setSelected(null);
-  }, []);
 
   return (
     <>
@@ -46,7 +52,9 @@ const ImageGallery = ({ pictures }: { pictures: picturesItem[] }) => {
           );
         })}
       </ul>
-      {selected && <Modal image={selected} onModalClose={closeModal} />}
+      {selected && (
+        <Modal image={selected} onModalClose={closeModal} onLoad={loader} />
+      )}
     </>
   );
 };

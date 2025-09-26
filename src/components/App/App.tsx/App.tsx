@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { PuffLoader } from 'react-spinners';
 
 import css from './App.module.css';
@@ -40,7 +40,7 @@ export default function App() {
       firstUpdate.current = true;
     };
   }, []);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (firstUpdate.current) {
       return;
     }
@@ -100,6 +100,14 @@ export default function App() {
       .finally(() => setloading(false));
   };
 
+  const toggleLoading = useCallback(
+    (val: boolean) => {
+      console.log(val);
+      setloading(val);
+    },
+    [setloading]
+  );
+
   const isLoadBtnVisible = page < totalPages;
   const loaderSize = 200;
   return (
@@ -110,7 +118,7 @@ export default function App() {
       {status === Status.SUCCESS && (
         <>
           <Title value={value}></Title>
-          <ImageGallery pictures={picturesData} />
+          <ImageGallery pictures={picturesData} loader={toggleLoading} />
           {isLoadBtnVisible && (
             <Button onClick={onLoadNewPics} className={css.LoadBtn}>
               Load more
