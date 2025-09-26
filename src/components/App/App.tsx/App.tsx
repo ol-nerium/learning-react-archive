@@ -43,19 +43,15 @@ export default function App() {
   useEffect(() => {
     if (firstUpdate.current) {
       firstUpdate.current = false;
-      console.log('[] useEffect, mount, changing to ', firstUpdate.current);
     }
     return () => {
-      console.log('[] useEffect, unmount', firstUpdate.current);
       firstUpdate.current = true;
     };
   }, []);
   useLayoutEffect(() => {
     if (firstUpdate.current) {
-      console.log('page useEffect on first render');
       return;
     }
-    console.log('page useEffect on not first render');
     getPictures(value, page);
   }, [page]);
 
