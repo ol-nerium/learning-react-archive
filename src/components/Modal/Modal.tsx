@@ -30,9 +30,16 @@ export default function Modal({
       }
     };
     window.addEventListener('keydown', handleEsc);
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    console.log(document.body.style.overflow);
     showLoader();
     return () => {
       window.removeEventListener('keydown', handleEsc);
+      console.log('fires');
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+
       hideLoader();
     };
   }, [onModalClose]);
