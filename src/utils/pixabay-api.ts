@@ -1,7 +1,7 @@
-const API_KEY: string = '22701944-f8f056c666d70ac6de5e1d35b';
+const myKey: string = import.meta.env.VITE_API_KEY;
 
 function linkSlug(query: string, page: number, limits = 12) {
-  return `https://pixabay.com/api/?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${limits}`;
+  return `https://pixabay.com/api/?q=${query}&page=${page}&key=${myKey}&image_type=photo&orientation=horizontal&per_page=${limits}`;
 }
 
 export function fetchData(query: string, page: number, limits: number) {
