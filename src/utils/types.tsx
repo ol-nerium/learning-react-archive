@@ -1,5 +1,12 @@
-export interface stateType {
+interface contactType {
+  id: string;
   name: string;
   number: string;
-  key: string;
 }
+
+interface actionType {
+  type: string;
+  payload: contactType | string;
+}
+
+export type { contactType, actionType };

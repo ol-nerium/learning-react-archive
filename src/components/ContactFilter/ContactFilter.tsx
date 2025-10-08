@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import css from './ContactFilter.module.css';
 import { useDispatch } from 'react-redux';
-import { setFilterValue } from '@/redux/store';
+import { setFilterValue } from '@/redux/filterSlice';
 
 export default function ContactFilter() {
   const [value, setValue] = useState('');

@@ -5,9 +5,7 @@ import { useDispatch } from 'react-redux';
 import css from './ContactsForm.module.css';
 import Button from '@/components/Button/Button';
 
-// import type { stateType } from '@/utils/types';
-
-import { addContact } from '@/redux/store';
+import { addContact } from '@/redux/contactsSlice';
 
 function ContactsForm() {
   const [name, setName] = useState('');
@@ -32,22 +30,6 @@ function ContactsForm() {
     dispatch(addContact({ name, number, id }));
     resetState();
   };
-
-  // const handleSubmit = useCallback((newContact: stateType): void => {
-  //   dispatch(addContact(newContact));
-
-  //   setContacts(prevState => {
-  //     if (
-  //       prevState.find(
-  //         (contact: stateType) => contact.name === newContact.name
-  //       )
-  //     ) {
-  //       alert('name already existes in the list');
-  //       return prevState;
-  //     }
-  //     return [...prevState, newContact];
-  //   });
-  // }, []);
 
   const resetState = () => {
     setName('');
