@@ -15,9 +15,7 @@ export default function Button({
   onClick,
   ...allyProps
 }: propsType) {
-  useEffect(() => {
-    // console.log('btn is rerendering but who cares');
-  }, [className, type]);
+  useEffect(() => {}, [className, type]);
 
   return (
     <button

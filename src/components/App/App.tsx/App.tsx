@@ -110,7 +110,6 @@ export default function App() {
 
   const toggleLoading = useCallback(
     (val: boolean) => {
-      console.log(val);
       setloading(val);
     },
     [setloading]
@@ -118,6 +117,7 @@ export default function App() {
 
   const isLoadBtnVisible = page < totalPages;
   const loaderSize = 200;
+
   return (
     <div className={css.App}>
       <Searchbar onSubmit={onSubmit} />
