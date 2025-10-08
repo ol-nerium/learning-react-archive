@@ -1,6 +1,7 @@
 import css from './ContactsList.module.css';
 import ContactItem from '@/components/ContactItem/ContactItem';
 import type { stateType } from '@/utils/types';
+import React from 'react';
 
 const ContactsList = ({
   contacts,
@@ -9,7 +10,6 @@ const ContactsList = ({
   contacts: stateType[];
   onDelete: (key: string) => void;
 }) => {
-  // console.log(contacts);
   return (
     <ul className={css.contactsList}>
       {contacts.map(({ name, number, key }) => {
@@ -17,7 +17,8 @@ const ContactsList = ({
           <ContactItem
             name={name}
             number={number}
-            onDelete={() => onDelete(key)}
+            onDelete={onDelete}
+            contactKey={key}
             key={key}
           />
         );
@@ -25,4 +26,4 @@ const ContactsList = ({
     </ul>
   );
 };
-export default ContactsList;
+export default React.memo(ContactsList);
