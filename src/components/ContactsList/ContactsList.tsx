@@ -5,21 +5,21 @@ import React from 'react';
 
 const ContactsList = ({
   contacts,
-  onDelete,
-}: {
+}: // onDelete,
+{
   contacts: stateType[];
-  onDelete: (key: string) => void;
+  // onDelete: (id: string) => void;
 }) => {
   return (
     <ul className={css.contactsList}>
-      {contacts.map(({ name, number, key }) => {
+      {contacts.map(({ name, number, id }) => {
         return (
           <ContactItem
             name={name}
             number={number}
-            onDelete={onDelete}
-            contactKey={key}
-            key={key}
+            // onDelete={onDelete}
+            contactKey={id}
+            key={id}
           />
         );
       })}

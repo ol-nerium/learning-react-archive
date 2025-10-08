@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
+import { useDispatch } from 'react-redux';
 
 import css from './ContactsForm.module.css';
 import Button from '@/components/Button/Button';
 
-import type { stateType } from '@/utils/types';
+// import type { stateType } from '@/utils/types';
 
-function ContactsForm({
-  onSubmit,
-}: {
-  onSubmit: (newContact: stateType) => void;
-}) {
+import { addContact } from '@/redux/store';
+
+function ContactsForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const [key, setKey] = useState(nanoid());
+  const [id, setId] = useState(nanoid());
+
+  const dispatch = useDispatch();
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const name: string = e.currentTarget.name;
@@ -28,14 +29,30 @@ function ContactsForm({
       alert('fill all fields');
       return;
     }
-    onSubmit({ name, number, key });
+    dispatch(addContact({ name, number, id }));
     resetState();
   };
+
+  // const handleSubmit = useCallback((newContact: stateType): void => {
+  //   dispatch(addContact(newContact));
+
+  //   setContacts(prevState => {
+  //     if (
+  //       prevState.find(
+  //         (contact: stateType) => contact.name === newContact.name
+  //       )
+  //     ) {
+  //       alert('name already existes in the list');
+  //       return prevState;
+  //     }
+  //     return [...prevState, newContact];
+  //   });
+  // }, []);
 
   const resetState = () => {
     setName('');
     setNumber('');
-    setKey(nanoid());
+    setId(nanoid());
   };
 
   return (

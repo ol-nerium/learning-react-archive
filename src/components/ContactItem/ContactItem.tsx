@@ -1,6 +1,8 @@
 import css from './ContactItem.module.css';
 import Button from '../Button/Button';
 import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { removeContact } from '@/redux/store';
 
 export default function ContactItem({
   name,
@@ -13,10 +15,15 @@ export default function ContactItem({
   contactKey: string;
   onDelete: (key: string) => void;
 }) {
-  const handleDelete = useCallback(
-    () => onDelete(contactKey),
-    [onDelete, contactKey]
-  );
+  const dispatch = useDispatch();
+  const handleDelete = () => {
+    dispatch(removeContact(contactKey));
+  };
+
+  // const handleDelete = useCallback(
+  //   () => onDelete(contactKey),
+  //   [onDelete, contactKey]
+  // );
   return (
     <li className={css.contactsListItem}>
       {name} : {number}
