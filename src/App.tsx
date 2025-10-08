@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Container from './components/Container/Constainer';
 import ContactsForm from './components/ContactsForm/ContactsForm';
 import ContactsList from './components/ContactsList/ContactsList';
@@ -26,26 +26,27 @@ export default function App() {
     );
   };
 
-  const filterContacts = (filterValue: string): stateType[] => {
-    if (filterValue.trim()) {
-      return contacts.filter((item: stateType) => {
-        const normalizeName = item.name.toLowerCase().trim();
-        const normalizeFilter = filterValue.toLowerCase().trim();
-        return normalizeName.includes(normalizeFilter);
-      });
-    }
-    return contacts;
-  };
+  const visibleContacts = useMemo(() => {
+    if (!filter.trim()) return contacts;
+    const normalizeFilter = filter.toLowerCase().trim();
 
-  const handleSubmit = (newContact: stateType): void => {
-    if (
-      contacts.find((contact: stateType) => contact.name === newContact.name)
-    ) {
-      alert('name already existes in the list');
-      return;
-    }
-    setContacts(contacts => [...contacts, newContact]);
-  };
+    return contacts.filter((item: stateType) => {
+      const normalizeName = item.name.toLowerCase();
+      return normalizeName.includes(normalizeFilter);
+    });
+  }, [filter, contacts]);
+
+  const handleSubmit = useCallback((newContact: stateType): void => {
+    setContacts(prevState => {
+      if (
+        prevState.find((contact: stateType) => contact.name === newContact.name)
+      ) {
+        alert('name already existes in the list');
+        return prevState;
+      }
+      return [...prevState, newContact];
+    });
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
@@ -54,7 +55,7 @@ export default function App() {
   return (
     <Container>
       <ContactsForm onSubmit={handleSubmit} />
-      <ContactsList contacts={filterContacts(filter)} onDelete={handleDelete} />
+      <ContactsList contacts={visibleContacts} onDelete={handleDelete} />
       <ContactFilter onChange={filterChange} />
     </Container>
   );

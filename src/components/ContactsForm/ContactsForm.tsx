@@ -6,7 +6,7 @@ import Button from '@/components/Button/Button';
 
 import type { stateType } from '@/utils/types';
 
-export default function ContactsForm({
+function ContactsForm({
   onSubmit,
 }: {
   onSubmit: (newContact: stateType) => void;
@@ -72,3 +72,5 @@ export default function ContactsForm({
     </form>
   );
 }
+
+export default React.memo(ContactsForm);

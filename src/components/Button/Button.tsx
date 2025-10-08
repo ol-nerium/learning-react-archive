@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, FC } from 'react';
 import css from './Button.module.css';
+import React from 'react';
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
