@@ -5,12 +5,14 @@ import ContactsForm from './components/ContactsForm/ContactsForm';
 import ContactsList from './components/ContactsList/ContactsList';
 import ContactFilter from './components/ContactFilter/ContactFilter';
 
-import type { contactType } from '@/utils/types';
+import type { contactType, stateType } from '@/utils/types';
 import { useSelector } from 'react-redux';
 
 export default function App() {
-  const contacts = useSelector(state => state.contacts.items.contacts);
-  const filter = useSelector(state => state.filters.filter.value);
+  const contacts = useSelector(
+    (state: stateType) => state.contacts.items.contacts
+  );
+  const filter = useSelector((state: stateType) => state.filters.filter.value);
 
   const visibleContacts = useMemo(() => {
     if (!filter.trim()) return contacts;

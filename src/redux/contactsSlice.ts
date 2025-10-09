@@ -1,4 +1,5 @@
-import type { contactType, actionType } from '@/utils/types';
+import type { contactType } from '@/utils/types';
+import type { Reducer } from 'redux';
 
 const loadedContacts = () => {
   try {
@@ -19,21 +20,24 @@ const initialState: {
   },
 };
 
-const addContact = (newItem: contactType): actionType => {
+const addContact = (newItem: contactType) => {
   return {
     type: 'action/contactAdded',
     payload: newItem,
   };
 };
 
-const removeContact = (key: string): actionType => {
+const removeContact = (key: string) => {
   return {
     type: 'action/contactRemoved',
     payload: key,
   };
 };
 
-const contactsReducer = (state = initialState, action: actionType) => {
+const contactsReducer: Reducer<{ items: { contacts: contactType[] } }, any> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case 'action/contactAdded': {
       if (

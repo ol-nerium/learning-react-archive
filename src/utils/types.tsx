@@ -4,9 +4,27 @@ interface contactType {
   number: string;
 }
 
-interface actionType {
-  type: string;
-  payload: contactType | string;
+// interface addedContactType {
+//   type: 'action/contactAdded';
+//   payload: contactType;
+// }
+
+// interface removedContactType {
+//   type: 'action/contactRemoved';
+//   payload: string;
+// }
+
+// interface filterActionType {
+//   type: string;
+//   payload: string;
+// }
+
+// type ContactsActionType = addedContactType | removedContactType;
+
+interface stateType {
+  contacts: { items: { contacts: contactType[] } };
+  filters: { filter: { value: string } };
 }
 
-export type { contactType, actionType };
+export type { contactType, stateType };
+// ContactsActionType, filterActionType;

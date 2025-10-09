@@ -1,4 +1,4 @@
-import type { contactType, actionType } from '@/utils/types';
+import type { Reducer } from 'redux';
 
 const initialState: {
   filter: { value: string };
@@ -13,7 +13,10 @@ const setFilterValue = (value: string) => {
   };
 };
 
-const filterReducer = (state = initialState, action: actionType) => {
+const filterReducer: Reducer<{ filter: { value: string } }, any> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case 'action/filterValueSet': {
       return {
