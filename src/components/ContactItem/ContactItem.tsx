@@ -1,7 +1,7 @@
 import css from './ContactItem.module.css';
 import Button from '../Button/Button';
 import { useDispatch } from 'react-redux';
-import { removeContact } from '@/redux/contactsSlice';
+import { contactRemoved } from '@/redux/contactsSlice';
 
 export default function ContactItem({
   name,
@@ -14,7 +14,7 @@ export default function ContactItem({
 }) {
   const dispatch = useDispatch();
   const handleDelete = () => {
-    dispatch(removeContact(contactKey));
+    dispatch(contactRemoved(contactKey));
   };
 
   return (

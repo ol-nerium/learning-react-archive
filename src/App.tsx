@@ -9,10 +9,8 @@ import type { contactType, stateType } from '@/utils/types';
 import { useSelector } from 'react-redux';
 
 export default function App() {
-  const contacts = useSelector(
-    (state: stateType) => state.contacts.items.contacts
-  );
-  const filter = useSelector((state: stateType) => state.filters.filter.value);
+  const contacts: contactType[] = useSelector(state => state.contacts);
+  const filter: string = useSelector(state => state.filters.value);
 
   const visibleContacts = useMemo(() => {
     if (!filter.trim()) return contacts;

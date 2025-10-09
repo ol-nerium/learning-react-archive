@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import css from './ContactsForm.module.css';
 import Button from '@/components/Button/Button';
 
-import { addContact } from '@/redux/contactsSlice';
+import { contactAdded } from '@/redux/contactsSlice';
 
 function ContactsForm() {
   const [name, setName] = useState('');
@@ -27,7 +27,7 @@ function ContactsForm() {
       alert('fill all fields');
       return;
     }
-    dispatch(addContact({ name, number, id }));
+    dispatch(contactAdded({ name, number, id }));
     resetState();
   };
 

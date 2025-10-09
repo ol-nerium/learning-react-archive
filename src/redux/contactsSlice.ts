@@ -1,5 +1,5 @@
 import type { contactType } from '@/utils/types';
-import type { Reducer } from 'redux';
+import { createSlice } from '@reduxjs/toolkit';
 
 const loadedContacts = () => {
   try {
@@ -12,36 +12,14 @@ const loadedContacts = () => {
   }
 };
 
-const initialState: {
-  items: { contacts: contactType[] };
-} = {
-  items: {
-    contacts: loadedContacts(),
-  },
-};
-
-const addContact = (newItem: contactType) => {
-  return {
-    type: 'action/contactAdded',
-    payload: newItem,
-  };
-};
-
-const removeContact = (key: string) => {
-  return {
-    type: 'action/contactRemoved',
-    payload: key,
-  };
-};
-
-const contactsReducer: Reducer<{ items: { contacts: contactType[] } }, any> = (
-  state = initialState,
-  action
-) => {
-  switch (action.type) {
-    case 'action/contactAdded': {
+const contactsReducer = createSlice({
+  name: 'contacts',
+  initialState: loadedContacts(),
+  reducers: {
+    contactAdded(state, action) {
+      console.log(state);
       if (
-        state.items.contacts.find(
+        state.find(
           (contact: contactType) =>
             contact.name.toLowerCase().trim() ===
             action.payload.name.toLowerCase().trim()
@@ -50,28 +28,14 @@ const contactsReducer: Reducer<{ items: { contacts: contactType[] } }, any> = (
         alert('name already existes in the list');
         return state;
       }
-      return {
-        ...state,
-        items: {
-          contacts: [...state.items.contacts, action.payload],
-        },
-      };
-    }
+      return [...state, action.payload];
+    },
 
-    case 'action/contactRemoved': {
-      return {
-        ...state,
-        items: {
-          contacts: state.items.contacts.filter(
-            item => item.id !== action.payload
-          ),
-        },
-      };
-    }
+    contactRemoved(state, action) {
+      return state.filter(item => item.id !== action.payload);
+    },
+  },
+});
 
-    default:
-      return state;
-  }
-};
-
-export { addContact, removeContact, contactsReducer };
+export default contactsReducer.reducer;
+export const { contactAdded, contactRemoved } = contactsReducer.actions;
