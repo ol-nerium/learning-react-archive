@@ -3,10 +3,10 @@ import ContactItem from '@/components/ContactItem/ContactItem';
 import type { contactType } from '@/utils/types';
 import React from 'react';
 
-const ContactsList = ({ contacts }: { contacts: contactType[] }) => {
+const ContactsList = ({ contacts }: { contacts: { items: contactType[] } }) => {
   return (
     <ul className={css.contactsList}>
-      {contacts.map(({ name, number, id }) => {
+      {contacts.items.map(({ name, number, id }) => {
         return (
           <ContactItem name={name} number={number} contactKey={id} key={id} />
         );

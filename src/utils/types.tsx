@@ -26,5 +26,10 @@ interface stateType {
   filters: { filter: { value: string } };
 }
 
-export type { contactType, stateType };
+interface RootState {
+  contacts: contactType[];
+  filters: { value: string };
+}
+
+export type { contactType, stateType, RootState };
 // ContactsActionType, filterActionType;

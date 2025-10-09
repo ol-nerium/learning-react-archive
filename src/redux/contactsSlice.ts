@@ -1,25 +1,23 @@
 import type { contactType } from '@/utils/types';
 import { createSlice } from '@reduxjs/toolkit';
 
-const loadedContacts = () => {
-  try {
-    const storageContacts: contactType[] = JSON.parse(
-      localStorage.getItem('contacts') as string
-    );
-    return storageContacts ? storageContacts : [];
-  } catch {
-    return [];
-  }
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+
+const persistConfig = {
+  key: 'contacts',
+  storage,
 };
 
-const contactsReducer = createSlice({
+const initialState: { items: contactType[] } = { items: [] };
+
+const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: loadedContacts(),
+  initialState: initialState,
   reducers: {
     contactAdded(state, action) {
-      console.log(state);
       if (
-        state.find(
+        state.items.find(
           (contact: contactType) =>
             contact.name.toLowerCase().trim() ===
             action.payload.name.toLowerCase().trim()
@@ -28,14 +26,21 @@ const contactsReducer = createSlice({
         alert('name already existes in the list');
         return state;
       }
-      return [...state, action.payload];
+      return { ...state, items: [...state.items, action.payload] };
     },
 
     contactRemoved(state, action) {
-      return state.filter(item => item.id !== action.payload);
+      return {
+        ...state,
+        items: state.items.filter(
+          (item: contactType) => item.id !== action.payload
+        ),
+      };
     },
   },
 });
 
-export default contactsReducer.reducer;
-export const { contactAdded, contactRemoved } = contactsReducer.actions;
+const contactsReducer = persistReducer(persistConfig, contactsSlice.reducer);
+
+export default contactsReducer;
+export const { contactAdded, contactRemoved } = contactsSlice.actions;
