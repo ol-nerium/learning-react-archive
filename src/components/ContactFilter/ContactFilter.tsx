@@ -13,11 +13,11 @@ export default function ContactFilter() {
   };
 
   useEffect(() => {
-    const timeouthandler = setTimeout(
+    const timeoutHandler = setTimeout(
       () => dispatch(setFilterValue(value)),
       300
     );
-    return () => clearTimeout(timeouthandler);
+    return () => clearTimeout(timeoutHandler);
   }, [value]);
 
   return (
