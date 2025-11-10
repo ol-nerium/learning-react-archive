@@ -1,3 +1,4 @@
+import { userLoggedOut } from '@/features/auth/authSLice';
 import { createSlice, nanoid, type PayloadAction } from '@reduxjs/toolkit';
 import { sub } from 'date-fns';
 
@@ -55,7 +56,6 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    // Declare a "case reducer" named `postAdded`.
     // The type of `action.payload` will be a `Post` object.
     postAdded: {
       reducer(state, action: PayloadAction<Post>) {
@@ -66,10 +66,10 @@ const postsSlice = createSlice({
           payload: {
             id: nanoid(),
             date: new Date().toISOString(),
+            reactions: initialReactions,
             title,
             content,
             user: userId,
-            reactions: initialReactions,
           },
         };
       },
@@ -113,6 +113,11 @@ const postsSlice = createSlice({
           ...state.slice(i + 1),
         ];
     },
+  },
+
+  extraReducers: builder => {
+    builder.addCase(userLoggedOut, _ => []);
+    // Clear out the list of posts whenever the user logs out
   },
 });
 

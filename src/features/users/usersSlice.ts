@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { selectCurrentUserName } from './../auth/authSLice';
+// import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '@/app/store';
 
 interface User {
@@ -24,3 +26,8 @@ export default userSlice.reducer;
 export const selectAllUsers = (state: RootState) => state.users;
 export const selectUserById = (state: RootState, userId: string | null) =>
   state.users.find(user => user.id === userId);
+
+export const selectCurrentUser = (state: RootState) => {
+  const currentUsername = selectCurrentUserName(state);
+  return selectUserById(state, currentUsername);
+};

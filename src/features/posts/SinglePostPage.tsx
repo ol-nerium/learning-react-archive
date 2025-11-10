@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { selectPostById } from './postsSlice';
 import { PostAuthor } from './PostAuthor';
 import { TimeAgo } from '@/components/TimeAgo';
+import ReactionButtons from './ReactionButtons';
+import { selectCurrentUserName } from '../auth/authSLice';
 
 export const SinglePostPage = () => {
   const { postId } = useParams();
@@ -12,6 +14,7 @@ export const SinglePostPage = () => {
   //at this point in the code. (This can be dangerous,
   //but we can make the assumption because we know the routing setup only shows
   //<EditPostForm> if there's a post ID in the URL.)
+  const currentUsername = useAppSelector(selectCurrentUserName);
 
   if (!post)
     return (
@@ -20,6 +23,8 @@ export const SinglePostPage = () => {
       </section>
     );
 
+  const canEdit = post?.user === currentUsername;
+
   return (
     <section>
       <article className="post">
@@ -27,9 +32,12 @@ export const SinglePostPage = () => {
         <PostAuthor userId={post.user} />
         <TimeAgo timestamp={post.date} />
         <p className="post-content">{post.content}</p>
-        <Link to={`/editPost/${post.id}`} className="button">
-          Edit Post
-        </Link>
+        {canEdit && (
+          <Link to={`/editPost/${post.id}`} className="button">
+            Edit Post
+          </Link>
+        )}
+        <ReactionButtons post={post} />
       </article>
     </section>
   );
