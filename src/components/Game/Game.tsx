@@ -28,6 +28,8 @@ const Game = () => {
 
   function handleReset() {
     setCurrentMove(1);
+
+    setGameHistory(state => state.slice(0, 1));
   }
 
   function isWinned() {

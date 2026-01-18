@@ -12,24 +12,22 @@ const Board = ({
     message: string;
     winnerLine: number[];
   } | null;
-}) => {
-  return (
-    <ul className={css.board}>
-      {squares.map((value, index) => {
-        const handleClick = () => onClick(index);
-        const isHighLighted = winnerInfo?.winnerLine.includes(index);
-        return (
-          <li className={css.boardItem} key={index}>
-            <Square
-              handleClick={handleClick}
-              value={value}
-              isHighLighted={isHighLighted}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
+}) => (
+  <ul className={css.board}>
+    {squares.map((value, index) => {
+      const handleClick = () => onClick(index);
+      const isHighLighted = winnerInfo?.winnerLine.includes(index);
+      return (
+        <li className={css.boardItem} key={index}>
+          <Square
+            handleClick={handleClick}
+            value={value}
+            isHighLighted={isHighLighted}
+          />
+        </li>
+      );
+    })}
+  </ul>
+);
 
 export default Board;

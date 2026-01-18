@@ -7,19 +7,17 @@ const HistoryItem = ({
 }: {
   item: string[];
   handleReturn: () => void;
-}) => {
-  return (
-    <li className={css.historyItem}>
-      <button onClick={handleReturn} className={css.historyBtn}></button>
-      <ul className={css.list}>
-        {item.map((item, index) => (
-          <li key={`${index}-${nanoid()}`} className={css.item}>
-            {item ? item : ' '}
-          </li>
-        ))}
-      </ul>
-    </li>
-  );
-};
+}) => (
+  <li className={css.historyItem}>
+    <button onClick={handleReturn} className={css.historyBtn}></button>
+    <ul className={css.list}>
+      {item.map((item, index) => (
+        <li key={`${index}-${nanoid()}`} className={css.item}>
+          {item ? item : ' '}
+        </li>
+      ))}
+    </ul>
+  </li>
+);
 
 export default HistoryItem;

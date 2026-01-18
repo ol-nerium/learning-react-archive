@@ -7,21 +7,19 @@ const HistoryList = ({
 }: {
   history: string[][];
   handleReturn: (move: number) => void;
-}) => {
-  return (
-    <ol className={css.historyList}>
-      {history.map((item: string[], index: number) => {
-        if (index === 0) return null;
-        return (
-          <HistoryItem
-            item={item}
-            key={`history-${index}`}
-            handleReturn={() => handleReturn(index + 1)}
-          />
-        );
-      })}
-    </ol>
-  );
-};
+}) => (
+  <ol className={css.historyList}>
+    {history.map((item: string[], index: number) => {
+      if (index === 0) return null;
+      return (
+        <HistoryItem
+          item={item}
+          key={`history-${index}`}
+          handleReturn={() => handleReturn(index + 1)}
+        />
+      );
+    })}
+  </ol>
+);
 
 export default HistoryList;
