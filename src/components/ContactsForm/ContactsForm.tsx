@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
+import { useDispatch } from 'react-redux';
 
 import css from './ContactsForm.module.css';
 import Button from '@/components/Button/Button';
 
-import type { stateType } from '@/utils/types';
+import { contactAdded } from '@/redux/contactsSlice';
 
-function ContactsForm({
-  onSubmit,
-}: {
-  onSubmit: (newContact: stateType) => void;
-}) {
+function ContactsForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const [key, setKey] = useState(nanoid());
+  const [id, setId] = useState(nanoid());
+
+  const dispatch = useDispatch();
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const name: string = e.currentTarget.name;
@@ -28,14 +27,14 @@ function ContactsForm({
       alert('fill all fields');
       return;
     }
-    onSubmit({ name, number, key });
+    dispatch(contactAdded({ name, number, id }));
     resetState();
   };
 
   const resetState = () => {
     setName('');
     setNumber('');
-    setKey(nanoid());
+    setId(nanoid());
   };
 
   return (
