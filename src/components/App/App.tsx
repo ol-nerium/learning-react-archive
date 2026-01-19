@@ -4,14 +4,6 @@ import clsx from 'clsx';
 import css from './App.module.css';
 import { lazy, Suspense } from 'react';
 
-// import Container from '@/components/Container/Container';
-// import Home from '@/pages/Home';
-// import Movies from '@/pages/Movies';
-// import NotFound from '@/pages/NotFound';
-// import MovieCard from '@/components/MovieCard/MovieCard';
-// import Cast from '@/components/Cast/Cast';
-// import Reviews from '@/components/Reviews/Reviews';
-
 const Container = lazy(() => import('@/components/Container/Container'));
 const Home = lazy(() => import('@/pages/Home'));
 const Movies = lazy(() => import('@/pages/Movies'));

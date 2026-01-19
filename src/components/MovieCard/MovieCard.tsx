@@ -21,27 +21,29 @@ export default function MovieCard() {
   const location = useLocation();
   useEffect(() => {
     if (!filmId) return;
-    getMovieById(filmId).then(res => {
-      setFilmData(res.data);
-    });
+    getMovieById(filmId)
+      .then(res => {
+        setFilmData(res.data);
+      })
+      .catch(err =>
+        alert(`something gone wrong( try later or check console (${err})`)
+      );
   }, [filmId]);
 
   // const backLinkRef = useRef(location.state?.from ?? '/movies');
   const backLinkRef = location.state?.from ?? '/movies';
   return (
     <div className={css.movieCard}>
-      <Suspense fallback={<div>Loading Card...</div>}>
-        {/* <Link to={backLinkRef.current}>back</Link> */}
-        {filmData && (
-          <>
-            <Link to={backLinkRef} className={css.backLink}>
-              back
-            </Link>
-            <MainInfoCard filmInfo={filmData} />
-            <AdditionalInfoCard parentState={location} />
-          </>
-        )}
-      </Suspense>
+      {/* <Link to={backLinkRef.current}>back</Link> */}
+      {filmData && (
+        <>
+          <Link to={backLinkRef} className={css.backLink}>
+            back
+          </Link>
+          <MainInfoCard filmInfo={filmData} />
+          <AdditionalInfoCard parentState={location} />
+        </>
+      )}
 
       <Suspense fallback={<div>Loading subpage...</div>}>
         <Outlet />

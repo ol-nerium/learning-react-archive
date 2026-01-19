@@ -11,7 +11,9 @@ export default function Home() {
   useEffect(() => {
     getTranding()
       .then(res => setTrandingArr(res.data.results))
-      .catch(err => console.log(err));
+      .catch(err =>
+        alert(`something gone wrong( try later or check console (${err})`)
+      );
   }, []);
 
   return (

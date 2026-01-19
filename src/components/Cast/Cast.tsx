@@ -6,19 +6,40 @@ import picture from './noImage.jpg';
 import css from './Cast.module.css';
 
 export default function Cast() {
-  const [cast, setCast] = useState([]);
+  const [cast, setCast] = useState<
+    | {
+        adult: boolean;
+        cast_id: number;
+        character: string;
+        credit_id: string;
+        gender: number;
+        id: number;
+        known_for_department: string;
+        name: string;
+        order: number;
+        original_name: string;
+        popularity: number;
+        profile_path: string;
+      }[]
+    | null
+  >(null);
   const { filmId } = useParams();
-
+  // console.log(cast);
   useEffect(() => {
     if (!filmId) return;
-    getCredits(filmId).then(res => {
-      setCast(res.data.cast);
-    });
+    getCredits(filmId)
+      .then(res => {
+        setCast(res.data.cast);
+      })
+      .catch(err =>
+        alert(`something gone wrong( try later or check console (${err})`)
+      );
   }, [filmId]);
-  return (
-    <ul className={css.castList}>
-      {cast.length > 0 ? (
-        cast.map(({ id, profile_path, name, character }) => (
+
+  if (cast !== null)
+    return cast.length > 0 ? (
+      <ul className={css.castList}>
+        {cast.map(({ id, profile_path, name, character }) => (
           <li key={`${id}${character}`} className={css.castListItem}>
             <div className={css.castItemImgWrap}>
               <img
@@ -44,10 +65,9 @@ export default function Cast() {
               </li>
             </ul>
           </li>
-        ))
-      ) : (
-        <p className={css.withoutInfo}>No Info(</p>
-      )}
-    </ul>
-  );
+        ))}
+      </ul>
+    ) : (
+      <p className={css.withoutInfo}>No Info(</p>
+    );
 }

@@ -23,9 +23,11 @@ export default function Movies() {
 
   useEffect(() => {
     if (searchingRequestValue === '') return;
-    getMoviesListByName(searchingRequestValue).then(res =>
-      setResArr(res.data.results)
-    );
+    getMoviesListByName(searchingRequestValue)
+      .then(res => setResArr(res.data.results))
+      .catch(err =>
+        alert(`something gone wrong( try later or check console (${err})`)
+      );
   }, [searchingRequestValue]);
 
   return (
