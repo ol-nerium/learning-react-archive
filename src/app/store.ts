@@ -1,4 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit';
+import {
+  type Action,
+  configureStore,
+  type ThunkAction,
+} from '@reduxjs/toolkit';
 
 // Removed the `counterReducer` function, `CounterState` type, and `Action` import
 

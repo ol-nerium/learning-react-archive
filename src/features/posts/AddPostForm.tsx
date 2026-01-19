@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { postAdded } from './postsSlice';
+import { addNewPost } from './postsSlice';
 import { selectCurrentUserName } from '../auth/authSLice';
+import { useState } from 'react';
 
 // TS types for the input fields
 // See: https://epicreact.dev/how-to-type-a-react-form-on-submit-handler/
@@ -15,10 +16,14 @@ interface AddPostFormElements extends HTMLFormElement {
 }
 
 export const AddPostForm = () => {
+  const [addRequestStatus, setAddRequestStatus] = useState<'idle' | 'pending'>(
+    'idle'
+  );
+
   const dispatch = useAppDispatch();
   const userId = useAppSelector(selectCurrentUserName)!;
 
-  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = async (e: React.FormEvent<AddPostFormElements>) => {
     e.preventDefault();
 
     const { elements } = e.currentTarget;
@@ -26,9 +31,20 @@ export const AddPostForm = () => {
     const content = elements.postContent.value;
     // Removed the `postAuthor` field everywhere in the component
 
-    dispatch(postAdded(title, content, userId));
+    const form = e.currentTarget;
+    try {
+      setAddRequestStatus('pending');
+      await dispatch(addNewPost({ title, content, user: userId })).unwrap();
+      // createAsyncThunk specifically, you can await dispatch(someThunk()).unwrap() to handle
+      // the request success or failure at the component level.
+      form.reset();
+    } catch (error) {
+      console.log('Failed to save the post: ', error);
+    } finally {
+      setAddRequestStatus('idle');
+    }
 
-    e.currentTarget.reset();
+    // e.currentTarget.reset();
   };
 
   return (

@@ -1,32 +1,47 @@
-import { useAppSelector } from '@/app/hooks';
-import { Link } from 'react-router-dom';
-import { selectAllPosts } from './postsSlice';
-import { PostAuthor } from './PostAuthor';
-import { TimeAgo } from '@/components/TimeAgo';
-import ReactionButtons from './ReactionButtons';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+// import { Link } from 'react-router-dom';
+import {
+  fetchPosts,
+  selectAllPosts,
+  selectPostsError,
+  selectPostsStatus,
+} from './postsSlice';
+// import { PostAuthor } from './PostAuthor';
+// import { TimeAgo } from '@/components/TimeAgo';
+// import ReactionButtons from './ReactionButtons';
+import { useEffect } from 'react';
+import { Spinner } from '@/components/Spinner';
+import { PostExcerpt } from '@/components/PostExcerpt';
 
 export const PostsList = () => {
+  const dispatch = useAppDispatch();
   const posts = useAppSelector(selectAllPosts);
-  const orderedPosts = posts
-    .slice()
-    .sort((a, b) => b.date.localeCompare(a.date));
+  const postStatus = useAppSelector(selectPostsStatus);
+  const postsError = useAppSelector(selectPostsError);
 
-  const renderedPosts = orderedPosts.map(post => (
-    <article className="post-excerpt" key={post.id}>
-      <h3>
-        <Link to={`/posts/${post.id}`}>{post.title}</Link>
-      </h3>
-      <PostAuthor userId={post.user}></PostAuthor>
-      <TimeAgo timestamp={post.date} />
-      <p className="post-content">{post.content.substring(0, 100)}</p>
-      <ReactionButtons post={post} />
-    </article>
-  ));
+  useEffect(() => {
+    if (postStatus === 'idle') dispatch(fetchPosts());
+  }, [dispatch, postStatus]);
+
+  let content: React.ReactNode;
+
+  if (postStatus === 'pending') {
+    content = <Spinner text="Loading..." />;
+  }
+  if (postStatus === 'succeeded') {
+    const orderedPosts = posts
+      .slice()
+      .sort((a, b) => b.date.localeCompare(a.date));
+    content = orderedPosts.map(post => (
+      <PostExcerpt post={post} key={post.id} />
+    ));
+  }
+  if (postStatus === 'failed') content = <div>{postsError}</div>;
 
   return (
     <section className="posts-list">
       <h2>Posts</h2>
-      {renderedPosts}
+      {content}
     </section>
   );
 };
