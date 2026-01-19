@@ -9,30 +9,20 @@ export default function VoteOptions({
   handleChange: (value: VoteType) => void;
   reset: () => void;
 }) {
+  const onVoteClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    const value = evt.currentTarget.value as VoteType;
+    handleChange(value);
+  };
+
   return (
     <Container>
-      <Button
-        value="good"
-        onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-          handleChange(evt.currentTarget.value as VoteType)
-        }
-      >
+      <Button value="good" onClick={onVoteClick}>
         Good
       </Button>
-      <Button
-        value="neutral"
-        onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-          handleChange(evt.currentTarget.value as VoteType)
-        }
-      >
+      <Button value="neutral" onClick={onVoteClick}>
         Neutral
       </Button>
-      <Button
-        value="bad"
-        onClick={(evt: React.MouseEvent<HTMLButtonElement>) =>
-          handleChange(evt.currentTarget.value as VoteType)
-        }
-      >
+      <Button value="bad" onClick={onVoteClick}>
         Bad
       </Button>
       <Reset onClick={reset}>Reset</Reset>
