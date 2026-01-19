@@ -14,6 +14,7 @@ export default function App() {
     if (storageContacts !== null) return storageContacts;
     return [];
   });
+
   const [filter, setFilter] = useState<string>('');
 
   const filterChange = (filterValue: string) => {
