@@ -21,20 +21,20 @@ function ContactsForm() {
     if (name === 'number') setNumber(value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    if (!name.trim() && !number.trim()) {
-      alert('fill all fields');
-      return;
-    }
-    dispatch(contactAdded({ name, number, id }));
-    resetState();
-  };
-
   const resetState = () => {
     setName('');
     setNumber('');
     setId(nanoid());
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    if (!name.trim() && !number.trim()) {
+      alert('fill all fields plz');
+      return;
+    }
+    dispatch(contactAdded({ name, number, id }));
+    resetState();
   };
 
   return (
