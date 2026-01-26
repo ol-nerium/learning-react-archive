@@ -2,7 +2,12 @@ import { Table, TableHeader, TableBody } from "./TransactionHistory.styled";
 
 import Transaction from "./Transaction";
 
-export default function TransactionHistory({ items }) {
+import type { transactionType } from "../../types/types";
+export default function TransactionHistory({
+  items,
+}: {
+  items: transactionType[];
+}) {
   return (
     <Table>
       <TableHeader>

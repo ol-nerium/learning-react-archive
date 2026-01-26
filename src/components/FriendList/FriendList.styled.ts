@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import changeStatusColor from "utils";
+import changeStatusColor from "../../utils";
 
 const List = styled.ul`
   display: flex;

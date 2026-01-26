@@ -1,12 +1,14 @@
 import FriendListItem from "./FriendListItem";
 import { List, ListItem } from "./FriendList.styled";
 
-function FriendList({ friends }) {
+import type { friendType } from "../../types/types";
+
+function FriendList({ friends }: { friends: friendType[] }) {
   return (
     <List>
       {friends.map((item) => {
         return (
-          <ListItem key={item.id} status={item.isOnline}>
+          <ListItem key={item.id}>
             <FriendListItem
               avatar={item.avatar}
               name={item.name}

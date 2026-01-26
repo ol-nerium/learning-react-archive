@@ -1,7 +1,9 @@
 import { Image } from "./FriendList.styled";
 
-export default function FriendListItem(props) {
-  const { avatar, name, isOnline } = props;
+import type { friendType } from "../../types/types";
+
+export default function FriendListItem(friendListItem: friendType) {
+  const { avatar, name, isOnline } = friendListItem;
   return (
     <div>
       <Image src={avatar} alt="Avatar" width="48" />
