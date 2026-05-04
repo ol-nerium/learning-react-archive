@@ -1,0 +1,35 @@
+.additionalCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-size: 2rem;
+  margin: 0 auto;
+  width: fit-content;
+}
+.additionalInfoList {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.additionalInfoListItem a {
+  color: currentColor;
+}
+.additionalInfoListItem a:hover,
+.additionalInfoListItem a:focus {
+  color: brown;
+}
+/* .additionalInfoListItem {
+} */
+
+.additionalTitle {
+  font-weight: 700;
+}
+
+.link {
+  font-weight: 400;
+}
+.link.active {
+  font-weight: 700;
+  color: brown;
+}

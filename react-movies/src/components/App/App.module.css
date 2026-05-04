@@ -1,0 +1,23 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+  box-shadow: rgba(253, 246, 246, 0.35) 0px 5px 15px;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.active,
+.link:hover {
+  color: rgb(157, 58, 58);
+}
+
+.link {
+  font-size: 2rem;
+}

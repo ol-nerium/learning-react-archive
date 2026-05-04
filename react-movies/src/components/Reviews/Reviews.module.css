@@ -1,0 +1,28 @@
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-size: 1.2rem;
+}
+.reviewsListItem {
+  box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+    rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+  padding: 1rem;
+}
+.reviewsListName {
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.reviewsListName span {
+  color: rgb(239, 151, 151);
+}
+
+.withoutInfo {
+  font-size: 2rem;
+  text-align: center;
+}
+/* .reviewsListContent {
+}
+.reviewsListContent {
+} */

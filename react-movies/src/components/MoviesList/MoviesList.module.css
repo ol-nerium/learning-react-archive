@@ -1,0 +1,23 @@
+.moviesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  width: max-content;
+  margin: 0 auto;
+}
+
+.moviesListItem {
+  font-size: 1.5rem;
+}
+
+.moviesListItem a {
+  color: currentColor;
+  transition: color 300ms linear;
+  text-align: left;
+}
+
+.moviesListItem a:hover,
+.moviesListItem a:focus {
+  color: aquamarine;
+}
