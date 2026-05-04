@@ -1,0 +1,38 @@
+.options {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.options__item {
+  list-style: none;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.options__item:last-of-type {
+  margin-bottom: 0;
+}
+
+.btn {
+  color: black;
+  background-color: white;
+  padding: 10px 30px;
+  width: 200px;
+  font-size: 25px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+
+  transition: color 250ms ease-in-out, background-color 1250ms linear;
+}
+
+.btn:hover,
+.btn:focus {
+  color: white;
+  background-color: black;
+}

@@ -1,0 +1,12 @@
+.stats {
+  margin: 0;
+  padding: 0;
+}
+.stats__option {
+  list-style-type: none;
+  font-size: 25px;
+  margin-bottom: 15px;
+}
+.stats__option:last-of-type {
+  margin-bottom: 0px;
+}
