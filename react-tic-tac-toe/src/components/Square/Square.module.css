@@ -1,0 +1,12 @@
+.squareBtn {
+  font-size: 2rem;
+  width: 100%;
+  height: 100%;
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+.highlighted {
+  background-color: rgba(194, 147, 147, 0.5);
+}
