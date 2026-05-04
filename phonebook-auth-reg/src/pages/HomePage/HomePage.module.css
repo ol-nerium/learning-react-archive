@@ -1,0 +1,21 @@
+.mainPage {
+  /* padding-top: 8.5rem; */
+  margin: 15% 0 auto 0;
+}
+
+.title {
+  margin-bottom: 2rem;
+}
+
+.imgWrap {
+  display: block;
+  margin: 0;
+  padding: 0;
+  width: 65%;
+  margin: 0 auto;
+}
+
+.imgWrap img {
+  width: 100%;
+  height: auto;
+}

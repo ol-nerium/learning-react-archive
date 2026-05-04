@@ -1,0 +1,15 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  width: 80%;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 2rem 40rem;
+
+  /* outline: 1px solid red; */
+  background-color: #242424;
+}

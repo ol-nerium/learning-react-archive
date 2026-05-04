@@ -1,0 +1,22 @@
+.regForm {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: rgb(127, 104, 74);
+  padding: 2rem;
+  margin: 2rem auto 0 auto;
+  border-radius: 1rem;
+}
+.regFormCaption {
+  font-size: 3rem;
+}
+.regFormInput {
+  width: 100%;
+  font-size: 3rem;
+}
+
+.regFormBtn {
+  margin-top: 1rem;
+  font-size: 3rem;
+}

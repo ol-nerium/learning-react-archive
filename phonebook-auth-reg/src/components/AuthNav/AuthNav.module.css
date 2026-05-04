@@ -1,0 +1,14 @@
+.navigation {
+  display: flex;
+  gap: 3rem;
+  font-size: 3rem;
+  /* margin-left: auto; */
+}
+
+.navLink {
+  color: inherit;
+}
+
+.active {
+  color: rgb(128, 92, 92);
+}

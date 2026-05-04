@@ -1,0 +1,16 @@
+.userMenu {
+  display: flex;
+  align-items: center;
+}
+
+.navigationButton {
+  font-size: 3rem;
+  padding: 1rem;
+  margin-left: 2rem;
+  background-color: rgb(128, 92, 92);
+}
+
+.userTitle {
+  font-size: 3rem;
+  margin-left: auto;
+}
